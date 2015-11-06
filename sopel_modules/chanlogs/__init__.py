@@ -49,7 +49,7 @@ class ChanlogsSection(StaticSection):
 
 
 def configure(config):
-    config.define_section('chanlogs', ChanlogsSection)
+    config.define_section('chanlogs', ChanlogsSection, validate=False)
     config.chanlogs.configure_setting(
         'dir',
         'Path to channel log storage directory',
