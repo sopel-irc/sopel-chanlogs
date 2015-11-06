@@ -21,7 +21,7 @@ except ImportError:
     pytz = None
 import sopel.module
 import sopel.tools
-from sopel.config.types import StaticSection, ValidatedAttribute, FilenameAttribute
+from sopel.config.types import StaticSection, ValidatedAttribute, FilenameAttribute, NO_DEFAULT
 
 MESSAGE_TPL = "{datetime}  <{trigger.nick}> {message}"
 ACTION_TPL = "{datetime}  * {trigger.nick} {message}"
@@ -46,6 +46,12 @@ class ChanlogsSection(StaticSection):
     """Attempt to use preferred timezone instead of UTC"""
     ## TODO: Allow configuration of templates, perhaps the user would like to use
     ##       parsers that support only specific formats.
+    message_template = ValidatedAttribute('message_template', default=NO_DEFAULT)
+    action_template = ValidatedAttribute('action_template', default=NO_DEFAULT)
+    join_template = ValidatedAttribute('join_template', default=NO_DEFAULT)
+    part_template = ValidatedAttribute('part_template', default=NO_DEFAULT)
+    quit_template = ValidatedAttribute('quit_template', default=NO_DEFAULT)
+    nick_template = ValidatedAttribute('nick_template', default=NO_DEFAULT)
 
 
 def configure(config):
