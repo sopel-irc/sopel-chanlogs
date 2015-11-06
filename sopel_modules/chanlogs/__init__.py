@@ -34,7 +34,7 @@ BAD_CHARS = re.compile(r'[\/?%*:|"<>. ]')
 
 
 class ChanlogsSection(StaticSection):
-    dir = FilenameAttribute('dir', default='~/chanlogs')
+    dir = FilenameAttribute('dir', directory=True, default='~/chanlogs')
     """Path to channel log storage directory"""
     by_day = ValidatedAttribute('by_day', parse=bool, default=True)
     """Split log files by day"""
@@ -54,11 +54,7 @@ def configure(config):
         'dir',
         'Path to channel log storage directory',
     )
-
-
-def setup(bot):
-    bot.config.define_section('chanlogs', ChanlogsSection)
-
+    
 
 def get_datetime(bot):
     """
@@ -79,7 +75,7 @@ def get_fpath(bot, trigger, channel=None):
     Returns a string corresponding to the path to the file where the message
     currently being handled should be logged.
     """
-    basedir = os.path.expanduser(bot.config.chanlogs.dir)
+    basedir = bot.config.chanlogs.dir
     channel = channel or trigger.sender
     channel = channel.lstrip("#")
     channel = BAD_CHARS.sub('__', channel)
@@ -108,15 +104,7 @@ def _format_template(tpl, bot, trigger, **kwargs):
 
 
 def setup(bot):
-    if not getattr(bot.config, "chanlogs", None):
-        raise ConfigurationError("Channel logs are not configured")
-    if not getattr(bot.config.chanlogs, "dir", None):
-        raise ConfigurationError("Channel log storage directory is not defined")
-
-    # ensure log directory exists
-    basedir = os.path.expanduser(bot.config.chanlogs.dir)
-    if not os.path.exists(basedir):
-        os.makedirs(basedir)
+    bot.config.define_section('chanlogs', ChanlogsSection)
 
     # locks for log files
     if not bot.memory.contains('chanlog_locks'):
