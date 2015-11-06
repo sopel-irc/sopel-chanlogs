@@ -21,7 +21,7 @@ except ImportError:
     pytz = None
 import sopel.module
 import sopel.tools
-from sopel.config import ConfigurationError
+from sopel.config.types import StaticSection, ValidatedAttribute, FilenameAttribute
 
 MESSAGE_TPL = "{datetime}  <{trigger.nick}> {message}"
 ACTION_TPL = "{datetime}  * {trigger.nick} {message}"
@@ -33,20 +33,31 @@ QUIT_TPL = "{datetime}  *** {trigger.nick} has quit IRC"
 BAD_CHARS = re.compile(r'[\/?%*:|"<>. ]')
 
 
+class ChanlogsSection(StaticSection):
+    dir = FilenameAttribute('dir', default='~/chanlogs')
+    """Path to channel log storage directory"""
+    by_day = ValidatedAttribute('by_day', parse=bool, default=True)
+    """Split log files by day"""
+    privmsg = ValidatedAttribute('privmsg', parse=bool, default=False)
+    """Record private messages"""
+    microseconds = ValidatedAttribute('microseconds', parse=bool, default=False)
+    """Microsecond precision"""
+    localtime = ValidatedAttribute('localtime', parse=bool, default=False)
+    """Attempt to use preferred timezone instead of UTC"""
+    ## TODO: Allow configuration of templates, perhaps the user would like to use
+    ##       parsers that support only specific formats.
+
+
 def configure(config):
-    if config.option("Configure channel logging", False):
-        config.add_section("chanlogs")
-        config.interactive_add(
-            "chanlogs", "dir",
-            "Absolute path to channel log storage directory",
-            default=os.path.join("~", "chanlogs")
-        )
-        config.add_option("chanlogs", "by_day", "Split log files by day", default=True)
-        config.add_option("chanlogs", "privmsg", "Record private messages", default=False)
-        config.add_option("chanlogs", "microseconds", "Microsecond precision", default=False)
-        config.add_option("chanlogs", "localtime", "Attempt to use preferred timezone", default=False)
-        # could ask if user wants to customize message templates,
-        # but that seems unnecessary
+    config.define_section('chanlogs', ChanlogsSection)
+    config.chanlogs.configure_setting(
+        'dir',
+        'Path to channel log storage directory',
+    )
+
+
+def setup(bot):
+    bot.config.define_section('chanlogs', ChanlogsSection)
 
 
 def get_datetime(bot):
