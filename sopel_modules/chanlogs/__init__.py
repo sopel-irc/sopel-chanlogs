@@ -46,12 +46,12 @@ class ChanlogsSection(StaticSection):
     """Attempt to use preferred timezone instead of UTC"""
     ## TODO: Allow configuration of templates, perhaps the user would like to use
     ##       parsers that support only specific formats.
-    message_template = ValidatedAttribute('message_template', default=NO_DEFAULT)
-    action_template = ValidatedAttribute('action_template', default=NO_DEFAULT)
-    join_template = ValidatedAttribute('join_template', default=NO_DEFAULT)
-    part_template = ValidatedAttribute('part_template', default=NO_DEFAULT)
-    quit_template = ValidatedAttribute('quit_template', default=NO_DEFAULT)
-    nick_template = ValidatedAttribute('nick_template', default=NO_DEFAULT)
+    message_template = ValidatedAttribute('message_template', default=None)
+    action_template = ValidatedAttribute('action_template', default=None)
+    join_template = ValidatedAttribute('join_template', default=None)
+    part_template = ValidatedAttribute('part_template', default=None)
+    quit_template = ValidatedAttribute('quit_template', default=None)
+    nick_template = ValidatedAttribute('nick_template', default=None)
 
 
 def configure(config):
