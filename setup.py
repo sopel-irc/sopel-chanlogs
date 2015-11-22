@@ -21,6 +21,7 @@ setup(
     author_email='powell.518@gmail.com',
     url='http://github.com/sopel-irc/sopel-chanlogs',
     packages=find_packages('.'),
+    install_requires=['sopel>=6.0,<7'],
     namespace_packages=['sopel_modules'],
     include_package_data=True,
     )
