@@ -29,6 +29,7 @@ NICK_TPL = "{datetime}  *** {trigger.nick} is now known as {trigger.sender}"
 JOIN_TPL = "{datetime}  *** {trigger.nick} has joined {trigger}"
 PART_TPL = "{datetime}  *** {trigger.nick} has left {trigger}"
 QUIT_TPL = "{datetime}  *** {trigger.nick} has quit IRC"
+TOPIC_TPL = "{datetime}  *** {trigger.nick} changed the topic to {trigger.args[1]}"
 # According to Wikipedia
 BAD_CHARS = re.compile(r'[\/?%*:|"<>. ]')
 
@@ -52,6 +53,7 @@ class ChanlogsSection(StaticSection):
     part_template = ValidatedAttribute('part_template', default=None)
     quit_template = ValidatedAttribute('quit_template', default=None)
     nick_template = ValidatedAttribute('nick_template', default=None)
+    topic_template = ValidatedAttribute('topic_template', default=None)
 
 
 def configure(config):
@@ -200,3 +202,15 @@ def log_nick_change(bot, trigger):
             with bot.memory['chanlog_locks'][fpath]:
                 with open(fpath, "ab") as f:
                     f.write(logline.encode('utf8'))
+
+
+@sopel.module.rule('.*')
+@sopel.module.event("TOPIC")
+@sopel.module.unblockable
+def log_topic(bot, trigger):
+    tpl = bot.config.chanlogs.topic_template or TOPIC_TPL
+    logline = _format_template(tpl, bot, trigger)
+    fpath = get_fpath(bot, trigger, channel=trigger.sender)
+    with bot.memory['chanlog_locks'][fpath]:
+        with open(fpath, "ab") as f:
+            f.write(logline.encode('utf8'))
