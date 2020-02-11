@@ -120,6 +120,7 @@ def setup(bot):
 
 
 @sopel.module.rule('.*')
+@sopel.module.echo
 @sopel.module.unblockable
 def log_message(bot, message):
     "Log every message in a channel"
