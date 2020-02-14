@@ -1,11 +1,11 @@
 # coding=utf8
 """
-chanlogs.py - Sopel Channel Logger module
+chanlogs.py - Sopel Channel Logger plugin
 Copyright 2014, David Baumgold <david@davidbaumgold.com>
 
 Licensed under the Eiffel Forum License 2
 
-http://sopel.chat
+https://sopel.chat/
 """
 from __future__ import unicode_literals
 import os
