@@ -1,0 +1,13 @@
+Changes between 0.1.0 and 0.2.0
+===============================
+
+Changed:
+* Target Sopel 7.x (#5)
+
+Added:
+* Support for logging topic changes (#3)
+* Support for echo-message (#4)
+
+Fixed:
+* Install errors (#1)
+* Startup/config glitches (#2)
