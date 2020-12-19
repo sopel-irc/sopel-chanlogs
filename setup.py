@@ -13,10 +13,15 @@ if __name__ == '__main__':
           file=sys.stderr)
 
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name='sopel_modules.chanlogs',
     version='0.2.0',
     description='A channel logging plugin for Sopel',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author='dgw',
     author_email='dgw@technobabbl.es',
     url='https://github.com/sopel-irc/sopel-chanlogs',
