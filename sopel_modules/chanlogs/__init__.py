@@ -54,7 +54,7 @@ class ChanlogsSection(StaticSection):
     quit_template = ValidatedAttribute('quit_template', default=None)
     nick_template = ValidatedAttribute('nick_template', default=None)
     topic_template = ValidatedAttribute('topic_template', default=None)
-
+    opt_in_channels = ListAttribute('opt_in_channels')
 
 def configure(config):
     config.define_section('chanlogs', ChanlogsSection, validate=False)
@@ -127,7 +127,8 @@ def log_message(bot, message):
     # if this is a private message and we're not logging those, return early
     if message.sender.is_nick() and not bot.config.chanlogs.privmsg:
         return
-
+    if message.sender.is_channel() and bot.config.chanlogs.opt_in_channels in not [] and trigger not in bot.config.chanlogs.opt_in_channels:
+        return
     # determine which template we want, message or action
     if message.startswith("\001ACTION ") and message.endswith("\001"):
         tpl = bot.config.chanlogs.action_template or ACTION_TPL
@@ -147,6 +148,8 @@ def log_message(bot, message):
 @sopel.module.event("JOIN")
 @sopel.module.unblockable
 def log_join(bot, trigger):
+    if message.sender.is_channel() and bot.config.chanlogs.opt_in_channels in not [] and trigger not in bot.config.chanlogs.opt_in_channels:
+        return
     tpl = bot.config.chanlogs.join_template or JOIN_TPL
     logline = _format_template(tpl, bot, trigger)
     fpath = get_fpath(bot, trigger, channel=trigger.sender)
@@ -159,6 +162,8 @@ def log_join(bot, trigger):
 @sopel.module.event("PART")
 @sopel.module.unblockable
 def log_part(bot, trigger):
+    if message.sender.is_channel() and bot.config.chanlogs.opt_in_channels in not [] and trigger not in bot.config.chanlogs.opt_in_channels:
+        return
     tpl = bot.config.chanlogs.part_template or PART_TPL
     logline = _format_template(tpl, bot, trigger=trigger)
     fpath = get_fpath(bot, trigger, channel=trigger.sender)
@@ -198,7 +203,8 @@ def log_nick_change(bot, trigger):
     privcopy = list(bot.privileges.items())
     # write logline to *all* channels that the user is present in
     for channel, privileges in privcopy:
-        if old_nick in privileges or new_nick in privileges:
+        if old_nick in privileges or new_nick in privileges and message.sender.is_channel() and bot.config.chanlogs.opt_in_channels in not [] and trigger not in bot.config.chanlogs.opt_in_channels:
+                return
             fpath = get_fpath(bot, trigger, channel)
             with bot.memory['chanlog_locks'][fpath]:
                 with open(fpath, "ab") as f:
@@ -209,6 +215,8 @@ def log_nick_change(bot, trigger):
 @sopel.module.event("TOPIC")
 @sopel.module.unblockable
 def log_topic(bot, trigger):
+    if message.sender.is_channel() and bot.config.chanlogs.opt_in_channels in not [] and trigger not in bot.config.chanlogs.opt_in_channels:
+        return
     tpl = bot.config.chanlogs.topic_template or TOPIC_TPL
     logline = _format_template(tpl, bot, trigger)
     fpath = get_fpath(bot, trigger, channel=trigger.sender)
