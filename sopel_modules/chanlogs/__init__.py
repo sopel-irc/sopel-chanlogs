@@ -56,6 +56,7 @@ class ChanlogsSection(StaticSection):
     topic_template = ValidatedAttribute('topic_template', default=None)
     opt_in_channels = ListAttribute('opt_in_channels')
 
+
 def configure(config):
     config.define_section('chanlogs', ChanlogsSection, validate=False)
     config.chanlogs.configure_setting(
