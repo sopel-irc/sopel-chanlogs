@@ -195,7 +195,7 @@ def log_quit(bot, trigger):
     # make a copy of bot.privileges that we can safely iterate over
     privcopy = list(bot.privileges.items())
     # write logline to *all* channels that the user was present in
-    if not _channel_is_opted_in(message.sender.is_channel(), trigger.sender, bot.config.chanlogs.opt_in_channels)
+    if not _channel_is_opted_in(message.sender.is_channel(), trigger.sender, bot.config.chanlogs.opt_in_channels):
         for channel, privileges in privcopy:
             if trigger.nick in privileges:
                 fpath = get_fpath(bot, trigger, channel)
