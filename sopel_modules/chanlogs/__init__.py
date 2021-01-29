@@ -160,7 +160,7 @@ def log_message(bot, message):
 @sopel.module.event("JOIN")
 @sopel.module.unblockable
 def log_join(bot, trigger):
-    if not _channel_is_opted_in(message.sender.is_channel(), trigger.sender, bot.config.chanlogs.opt_in_channels)
+    if not _channel_is_opted_in(message.sender.is_channel(), trigger.sender, bot.config.chanlogs.opt_in_channels):
         return
     tpl = bot.config.chanlogs.join_template or JOIN_TPL
     logline = _format_template(tpl, bot, trigger)
