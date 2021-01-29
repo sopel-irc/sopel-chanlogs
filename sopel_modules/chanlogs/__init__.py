@@ -228,7 +228,7 @@ def log_nick_change(bot, trigger):
 @sopel.module.event("TOPIC")
 @sopel.module.unblockable
 def log_topic(bot, trigger):
-    if not _channel_is_opted_in(message.sender.is_channel(), trigger.sender, bot.config.chanlogs.opt_in_channels)
+    if not _channel_is_opted_in(message.sender.is_channel(), trigger.sender, bot.config.chanlogs.opt_in_channels):
         return
     tpl = bot.config.chanlogs.topic_template or TOPIC_TPL
     logline = _format_template(tpl, bot, trigger)
