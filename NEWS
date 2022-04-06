@@ -1,3 +1,10 @@
+Changes between 0.2.1 and 0.2.2
+===============================
+
+Changed:
+* Replaced deprecated call to `SopelMemory.contains()` (#8)
+
+
 Changes between 0.2.0 and 0.2.1
 ===============================
 
