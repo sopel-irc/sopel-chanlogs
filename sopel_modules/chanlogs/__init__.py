@@ -72,7 +72,7 @@ def get_datetime(bot):
     if pytz:
         dt = dt.replace(tzinfo=timezone('UTC'))
         if bot.config.chanlogs.localtime:
-            dt = dt.astimezone(timezone(bot.config.clock.tz))
+            dt = dt.astimezone(timezone(bot.config.core.default_timezone))
     if not bot.config.chanlogs.microseconds:
         dt = dt.replace(microsecond=0)
     return dt
