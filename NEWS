@@ -1,3 +1,13 @@
+Changes between 0.2.2 and 0.2.3
+===============================
+
+Fixed:
+* Switch from obsolete `clock.tz` setting to `core.default_timezone` (#11)
+
+Meta:
+* Greatly improved documentation of settings (#12)
+
+
 Changes between 0.2.1 and 0.2.2
 ===============================
 
