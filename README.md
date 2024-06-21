@@ -15,7 +15,7 @@ configuration requires it.
 
 ### Requirements
 
-`sopel-chanlogs` requires only Sopel itself, version 7.1 or higher.
+`sopel-chanlogs` requires only Sopel itself, version 8.0 or higher.
 
 ## Usage
 

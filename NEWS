@@ -1,5 +1,18 @@
 ## Changelog
 
+### 0.3.0
+
+First release as `sopel-chanlogs`, replacing `sopel_modules.chanlogs`.
+
+Changed:
+* Modernize packaging, target Sopel 8.0+, take advantage of new Sopel API
+  features, and support only Python 3.8+
+
+Meta:
+* Fixed package metadata to credit the original author(s) and current
+  maintainer(s) correctly
+
+
 ### 0.2.3
 
 Fixed:
