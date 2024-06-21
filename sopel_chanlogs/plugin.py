@@ -2,7 +2,8 @@
 
 A channel logging plugin for Sopel IRC bots
 
-Original plugin copyright 2014, David Baumgold <david@davidbaumgold.com>
+Built on an original plugin by David Baumgold <david@davidbaumgold.com>, 2014
+Continued by Elsie Powell, Max Gurela, dgw, and other contributors
 
 Licensed under the Eiffel Forum License 2
 
@@ -13,7 +14,6 @@ from __future__ import annotations
 from datetime import datetime
 import os.path
 import re
-import sys
 import threading
 
 try:
@@ -22,9 +22,10 @@ try:
 except ImportError:
     pytz = None
 
-import sopel.module
-import sopel.tools
+from sopel import plugin
 from sopel.config.types import StaticSection, ValidatedAttribute, FilenameAttribute, NO_DEFAULT
+from sopel.tools.memories import SopelMemoryWithDefault
+
 
 MESSAGE_TPL = "{datetime}  <{trigger.nick}> {message}"
 ACTION_TPL = "{datetime}  * {trigger.nick} {message}"
@@ -48,8 +49,8 @@ class ChanlogsSection(StaticSection):
     """Microsecond precision"""
     localtime = ValidatedAttribute('localtime', parse=bool, default=False)
     """Attempt to use preferred timezone instead of UTC"""
-    ## TODO: Allow configuration of templates, perhaps the user would like to use
-    ##       parsers that support only specific formats.
+    # TODO: Allow configuration of templates; perhaps the user would like to use
+    #       parsers that support only specific formats.
     message_template = ValidatedAttribute('message_template', default=None)
     action_template = ValidatedAttribute('action_template', default=None)
     join_template = ValidatedAttribute('join_template', default=None)
@@ -65,12 +66,10 @@ def configure(config):
         'dir',
         'Path to channel log storage directory',
     )
-    
+
 
 def get_datetime(bot):
-    """
-    Returns a datetime object of the current time.
-    """
+    """Get a datetime object of the current time."""
     dt = datetime.utcnow()
     if pytz:
         dt = dt.replace(tzinfo=timezone('UTC'))
@@ -82,7 +81,8 @@ def get_datetime(bot):
 
 
 def get_fpath(bot, trigger, channel=None):
-    """
+    """Get the appropriate log file path.
+
     Returns a string corresponding to the path to the file where the message
     currently being handled should be logged.
     """
@@ -90,7 +90,7 @@ def get_fpath(bot, trigger, channel=None):
     channel = channel or trigger.sender
     channel = channel.lstrip("#")
     channel = BAD_CHARS.sub('__', channel)
-    channel = sopel.tools.Identifier(channel).lower()
+    channel = bot.make_identifier(channel).lower()
 
     dt = get_datetime(bot)
     if bot.config.chanlogs.by_day:
@@ -109,8 +109,6 @@ def _format_template(tpl, bot, trigger, **kwargs):
         **kwargs
     ) + "\n"
 
-    if sys.version_info.major < 3 and isinstance(formatted, unicode):
-        formatted = formatted.encode('utf-8')
     return formatted
 
 
@@ -119,14 +117,14 @@ def setup(bot):
 
     # locks for log files
     if 'chanlog_locks' not in bot.memory:
-        bot.memory['chanlog_locks'] = sopel.tools.SopelMemoryWithDefault(threading.Lock)
+        bot.memory['chanlog_locks'] = SopelMemoryWithDefault(threading.Lock)
 
 
-@sopel.module.rule('.*')
-@sopel.module.echo
-@sopel.module.unblockable
+@plugin.rule('.*')
+@plugin.echo
+@plugin.unblockable
 def log_message(bot, message):
-    "Log every message in a channel"
+    """Log all messages, including Sopel's own"""
     # if this is a private message and we're not logging those, return early
     if message.sender.is_nick() and not bot.config.chanlogs.privmsg:
         return
@@ -146,10 +144,11 @@ def log_message(bot, message):
             f.write(logline.encode('utf8'))
 
 
-@sopel.module.rule('.*')
-@sopel.module.event("JOIN")
-@sopel.module.unblockable
+@plugin.rule('.*')
+@plugin.event("JOIN")
+@plugin.unblockable
 def log_join(bot, trigger):
+    """Log joins"""
     tpl = bot.config.chanlogs.join_template or JOIN_TPL
     logline = _format_template(tpl, bot, trigger)
     fpath = get_fpath(bot, trigger, channel=trigger.sender)
@@ -158,10 +157,11 @@ def log_join(bot, trigger):
             f.write(logline.encode('utf8'))
 
 
-@sopel.module.rule('.*')
-@sopel.module.event("PART")
-@sopel.module.unblockable
+@plugin.rule('.*')
+@plugin.event("PART")
+@plugin.unblockable
 def log_part(bot, trigger):
+    """Log parts"""
     tpl = bot.config.chanlogs.part_template or PART_TPL
     logline = _format_template(tpl, bot, trigger=trigger)
     fpath = get_fpath(bot, trigger, channel=trigger.sender)
@@ -170,12 +170,13 @@ def log_part(bot, trigger):
             f.write(logline.encode('utf8'))
 
 
-@sopel.module.rule('.*')
-@sopel.module.event("QUIT")
-@sopel.module.unblockable
-@sopel.module.thread(False)
-@sopel.module.priority('high')
+@plugin.rule('.*')
+@plugin.event("QUIT")
+@plugin.unblockable
+@plugin.thread(False)
+@plugin.priority('high')
 def log_quit(bot, trigger):
+    """Log quits"""
     tpl = bot.config.chanlogs.quit_template or QUIT_TPL
     logline = _format_template(tpl, bot, trigger)
     # make a copy of bot.privileges that we can safely iterate over
@@ -189,10 +190,11 @@ def log_quit(bot, trigger):
                     f.write(logline.encode('utf8'))
 
 
-@sopel.module.rule('.*')
-@sopel.module.event("NICK")
-@sopel.module.unblockable
+@plugin.rule('.*')
+@plugin.event("NICK")
+@plugin.unblockable
 def log_nick_change(bot, trigger):
+    """Log nick changes"""
     tpl = bot.config.chanlogs.nick_template or NICK_TPL
     logline = _format_template(tpl, bot, trigger)
     old_nick = trigger.nick
@@ -208,10 +210,11 @@ def log_nick_change(bot, trigger):
                     f.write(logline.encode('utf8'))
 
 
-@sopel.module.rule('.*')
-@sopel.module.event("TOPIC")
-@sopel.module.unblockable
+@plugin.rule('.*')
+@plugin.event("TOPIC")
+@plugin.unblockable
 def log_topic(bot, trigger):
+    """Log topic changes"""
     tpl = bot.config.chanlogs.topic_template or TOPIC_TPL
     logline = _format_template(tpl, bot, trigger)
     fpath = get_fpath(bot, trigger, channel=trigger.sender)
