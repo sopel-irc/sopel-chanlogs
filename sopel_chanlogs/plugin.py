@@ -16,11 +16,7 @@ import os.path
 import re
 import threading
 
-try:
-    from pytz import timezone
-    import pytz
-except ImportError:
-    pytz = None
+import pytz
 
 from sopel import plugin
 from sopel.config.types import StaticSection, ValidatedAttribute, FilenameAttribute, NO_DEFAULT
@@ -70,13 +66,17 @@ def configure(config):
 
 def get_datetime(bot):
     """Get a datetime object of the current time."""
-    dt = datetime.utcnow()
-    if pytz:
-        dt = dt.replace(tzinfo=timezone('UTC'))
-        if bot.config.chanlogs.localtime:
-            dt = dt.astimezone(timezone(bot.config.core.default_timezone))
+    dt = datetime.now(pytz.utc)
+    target_tz = bot.config.core.default_timezone
+
+    if bot.config.chanlogs.localtime and target_tz != 'UTC':
+        # small optimization above, making sure not to convert UTC to UTC
+        target_tz = pytz.timezone(target_tz)
+        dt = dt.astimezone(target_tz)
+
     if not bot.config.chanlogs.microseconds:
         dt = dt.replace(microsecond=0)
+
     return dt
 
 

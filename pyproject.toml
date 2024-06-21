@@ -47,6 +47,7 @@ keywords = [
 requires-python = ">=3.8, <4"
 dependencies = [
   "sopel>=8.0",
+  "pytz",  # Sopel requires this, but it's better to be explicit
 ]
 
 [project.urls]
