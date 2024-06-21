@@ -19,7 +19,12 @@ import threading
 import pytz
 
 from sopel import plugin
-from sopel.config.types import StaticSection, ValidatedAttribute, FilenameAttribute, NO_DEFAULT
+from sopel.config.types import (
+    BooleanAttribute,
+    FilenameAttribute,
+    StaticSection,
+    ValidatedAttribute,
+)
 from sopel.tools.memories import SopelMemoryWithDefault
 
 
@@ -37,13 +42,13 @@ BAD_CHARS = re.compile(r'[\/?%*:|"<>. ]')
 class ChanlogsSection(StaticSection):
     dir = FilenameAttribute('dir', directory=True, default='~/chanlogs')
     """Path to channel log storage directory"""
-    by_day = ValidatedAttribute('by_day', parse=bool, default=True)
+    by_day = BooleanAttribute('by_day', default=True)
     """Split log files by day"""
-    privmsg = ValidatedAttribute('privmsg', parse=bool, default=False)
+    privmsg = BooleanAttribute('privmsg', default=False)
     """Record private messages"""
-    microseconds = ValidatedAttribute('microseconds', parse=bool, default=False)
+    microseconds = BooleanAttribute('microseconds', default=False)
     """Microsecond precision"""
-    localtime = ValidatedAttribute('localtime', parse=bool, default=False)
+    localtime = BooleanAttribute('localtime', default=False)
     """Attempt to use preferred timezone instead of UTC"""
     # TODO: Allow configuration of templates; perhaps the user would like to use
     #       parsers that support only specific formats.
