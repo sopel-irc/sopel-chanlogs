@@ -18,8 +18,8 @@ with open("README.md", "r") as fh:
 
 setup(
     name='sopel_modules.chanlogs',
-    version='0.2.3',
-    description='A channel logging plugin for Sopel',
+    version='0.2.3.post0',
+    description='A channel logging plugin for Sopel (replaced)',
     long_description=long_description,
     long_description_content_type="text/markdown",
     author='dgw',

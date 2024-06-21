@@ -1,9 +1,14 @@
 # sopel-chanlogs
 A channel logging plugin for Sopel IRC bots
 
+**This package no longer receives updates. Please upgrade to Sopel 8.0+ and
+[`sopel-chanlogs`][new-chanlogs] when you are able to do so.**
+
+[new-chanlogs]: https://pypi.org/project/sopel-chanlogs/
+
 ## Requirements
 
-`sopel-chanlogs` requires only Sopel itself, version 7.0 or higher.
+`sopel-chanlogs` requires only Sopel 7.x itself.
 
 ## Usage
 

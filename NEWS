@@ -1,3 +1,9 @@
+Changes in 0.2.3.post0
+======================
+
+Meta:
+* Note that this package is obsolete, replaced by `sopel-chanlogs`
+
 Changes between 0.2.2 and 0.2.3
 ===============================
 
