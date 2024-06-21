@@ -184,12 +184,12 @@ def log_quit(bot, trigger):
     """Log quits"""
     tpl = bot.config.chanlogs.quit_template or QUIT_TPL
     logline = _format_template(tpl, bot, trigger)
-    # make a copy of bot.privileges that we can safely iterate over
-    privcopy = list(bot.privileges.items())
+    # make a copy of Sopel's channel list that we can safely iterate over
+    channels_copy = list(bot.channels.values())
     # write logline to *all* channels that the user was present in
-    for channel, privileges in privcopy:
-        if trigger.nick in privileges:
-            fpath = get_fpath(bot, trigger, channel)
+    for channel in channels_copy:
+        if trigger.nick in channel.users:
+            fpath = get_fpath(bot, trigger, channel.name)
             with bot.memory['chanlog_locks'][fpath]:
                 with open(fpath, "ab") as f:
                     f.write(logline.encode('utf8'))
@@ -204,12 +204,12 @@ def log_nick_change(bot, trigger):
     logline = _format_template(tpl, bot, trigger)
     old_nick = trigger.nick
     new_nick = trigger.sender
-    # make a copy of bot.privileges that we can safely iterate over
-    privcopy = list(bot.privileges.items())
+    # make a copy of Sopel's channel list that we can safely iterate over
+    channels_copy = list(bot.channels.values())
     # write logline to *all* channels that the user is present in
-    for channel, privileges in privcopy:
-        if old_nick in privileges or new_nick in privileges:
-            fpath = get_fpath(bot, trigger, channel)
+    for channel in channels_copy:
+        if old_nick in channel.users or new_nick in channel.users:
+            fpath = get_fpath(bot, trigger, channel.name)
             with bot.memory['chanlog_locks'][fpath]:
                 with open(fpath, "ab") as f:
                     f.write(logline.encode('utf8'))
