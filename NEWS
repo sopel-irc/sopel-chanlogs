@@ -1,5 +1,6 @@
-Changes between 0.2.2 and 0.2.3
-===============================
+## Changelog
+
+### 0.2.3
 
 Fixed:
 * Switch from obsolete `clock.tz` setting to `core.default_timezone` (#11)
@@ -8,23 +9,20 @@ Meta:
 * Greatly improved documentation of settings (#12)
 
 
-Changes between 0.2.1 and 0.2.2
-===============================
+### 0.2.2
 
 Changed:
 * Replaced deprecated call to `SopelMemory.contains()` (#8)
 
 
-Changes between 0.2.0 and 0.2.1
-===============================
+### 0.2.1
 
 Meta:
 * Added project README file
 * Use README as project's PyPI description
 
 
-Changes between 0.1.0 and 0.2.0
-===============================
+### 0.2.0
 
 Changed:
 * Target Sopel 7.x (#5)
@@ -36,3 +34,8 @@ Added:
 Fixed:
 * Install errors (#1)
 * Startup/config glitches (#2)
+
+
+### 0.1.0
+
+First release of `sopel_modules.chanlogs`.

@@ -1,24 +1,27 @@
-# coding=utf8
-"""
-chanlogs.py - Sopel Channel Logger plugin
-Copyright 2014, David Baumgold <david@davidbaumgold.com>
+"""sopel-chanlogs
+
+A channel logging plugin for Sopel IRC bots
+
+Original plugin copyright 2014, David Baumgold <david@davidbaumgold.com>
 
 Licensed under the Eiffel Forum License 2
 
 https://sopel.chat/
 """
-from __future__ import unicode_literals
-import os
+from __future__ import annotations
+
+from datetime import datetime
 import os.path
 import re
-import threading
 import sys
-from datetime import datetime
+import threading
+
 try:
     from pytz import timezone
     import pytz
 except ImportError:
     pytz = None
+
 import sopel.module
 import sopel.tools
 from sopel.config.types import StaticSection, ValidatedAttribute, FilenameAttribute, NO_DEFAULT

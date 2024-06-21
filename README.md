@@ -1,21 +1,28 @@
 # sopel-chanlogs
+
 A channel logging plugin for Sopel IRC bots
 
-## Requirements
+## Installing
 
-`sopel-chanlogs` requires only Sopel itself, version 7.0 or higher.
+Releases are hosted on PyPI, so after installing Sopel, all you need is `pip`:
+
+```shell
+$ pip install sopel-chanlogs
+```
+
+Enable the plugin with `sopel-plugins enable chanlogs`, if your bot
+configuration requires it.
+
+### Requirements
+
+`sopel-chanlogs` requires only Sopel itself, version 7.1 or higher.
 
 ## Usage
 
-Install the package from PyPI:
-
-    pip install sopel-modules.chanlogs
-
-Enable with the `sopel-plugins enable chanlogs` command, if your bot
-configuration requires it.
-
 ### Configuration
 
+The easiest way to configure `sopel-chanlogs` is via Sopel's configuration
+wizard—simply run `sopel-plugins configure chanlogs` and complete the prompts.
 All settings are optional, falling back on sensible defaults.
 
 <dl>

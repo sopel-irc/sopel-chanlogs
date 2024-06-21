@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=63.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+platforms = ["Linux x86, x86-64"]
+
+[tool.setuptools.packages.find]
+include = ["sopel_chanlogs", "sopel_chanlogs.*"]
+namespaces = false
+
+[tool.setuptools.dynamic]
+readme = { file=["README.md", "NEWS"], content-type="text/markdown" }
+
+[project]
+name = "sopel-chanlogs"
+version = "0.3.0.dev0"
+description = "A channel logging plugin for Sopel IRC bots"
+
+authors = [
+  { name="David Baumgold" },
+  { name="Elsie Powell" },
+]
+
+maintainers = [
+  { name="dgw", email="dgw@technobabbl.es" },
+]
+
+license = { text="EFL-2.0" }
+dynamic = ["readme"]
+
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
+  "License :: Eiffel Forum License (EFL)",
+  "License :: OSI Approved :: Eiffel Forum License",
+  "Topic :: Communications :: Chat :: Internet Relay Chat",
+]
+keywords = [
+  "sopel",
+  "plugin",
+  "bot",
+  "irc",
+]
+
+# TODO: enforce this when enabling Sopel 8 support
+# requires-python = ">=3.8, <4"
+dependencies = [
+  "sopel>=7.0,<8",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/sopel-irc/sopel-chanlogs"
+"Bug Tracker" = "https://github.com/sopel-irc/sopel-chanlogs/issues"
+
+[project.entry-points."sopel.plugins"]
+"chanlogs" = "sopel_chanlogs.plugin"
