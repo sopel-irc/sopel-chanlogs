@@ -135,10 +135,8 @@ def log_message(bot, message):
         return
 
     # determine which template we want, message or action
-    if message.startswith("\001ACTION ") and message.endswith("\001"):
+    if hasattr(message, 'ctcp') and message.ctcp == 'ACTION':
         tpl = bot.config.chanlogs.action_template or ACTION_TPL
-        # strip off start and end
-        message = message[8:-1]
     else:
         tpl = bot.config.chanlogs.message_template or MESSAGE_TPL
 
