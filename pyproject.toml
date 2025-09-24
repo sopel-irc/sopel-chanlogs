@@ -14,7 +14,7 @@ readme = { file=["README.md", "NEWS"], content-type="text/markdown" }
 
 [project]
 name = "sopel-chanlogs"
-version = "0.3.0"
+version = "0.3.1"
 description = "A channel logging plugin for Sopel IRC bots"
 
 authors = [
